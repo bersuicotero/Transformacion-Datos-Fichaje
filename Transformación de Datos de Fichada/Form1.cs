@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -8,30 +9,15 @@ namespace Transformación_de_Datos_de_Fichada
 {
     public partial class Form1 : Form
     {
+        public class userData
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public List<String> WorkingHours { get; set; }
+        }
         public Form1()
         {
             InitializeComponent();
-        }
-
-        public DataTable GetDataFromExcel(string fileName, string fileExt)
-        {
-            string conn = string.Empty;
-            DataTable dtexcel = new DataTable();
-            if (fileExt.CompareTo(".xls") == 0)
-                conn = @"provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + fileName + ";Extended Properties='Excel 8.0;HRD=Yes;IMEX=1';"; //for below excel 2007  
-            else
-                conn = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileName + ";Extended Properties='Excel 12.0;HDR=NO';"; //for above excel 2007  
-            using (OleDbConnection con = new OleDbConnection(conn))
-            {
-                try
-                {
-                    OleDbDataAdapter oleAdpt = new OleDbDataAdapter("select * from [Registros$]", con); //here we read data from sheet1  
-                    oleAdpt.Fill(dtexcel); //fill excel data into dataTable  
-                }
-                catch { }
-            }
-            return dtexcel;
-
         }
 
         private void btnChooseFile_Click(object sender, EventArgs e)
@@ -46,10 +32,52 @@ namespace Transformación_de_Datos_de_Fichada
                 fileExt = Path.GetExtension(filePath);
                 if (fileExt.CompareTo(".xls") == 0)
                 {
-                    DataTable dtExcel = new DataTable();
-                    dtExcel = GetDataFromExcel(filePath, fileExt);
-                    dataGridView1.Visible = true;
-                    dataGridView1.DataSource = dtExcel;
+                    DataSet dataExcel = GenerarDataSet(filePath);
+                    DataTable dt = dataExcel.Tables[0];
+                    List<String> Days = new List<String>();
+                    List<String> numberOfDays = new List<String>();
+                    List<userData> users = new List<userData>();
+                    List<String> horas = new List<String>();
+
+
+                    for (int i = 4; i < dt.Rows.Count; i++)
+                    {
+                        if (dt.Rows[i][0].ToString() != "")
+                        {
+
+                            for (int j = 3; j < dt.Columns.Count; j++)
+                            {
+                                if (j < dt.Columns.Count)
+                                {
+                                    horas.AddRange(new [] { dt.Rows[i][j].ToString(), i.ToString()});
+                                }
+                                else
+                                {
+                                    j = 0;
+                                }
+                            }
+                            users.Add(new userData
+                            {
+                                Id = dt.Rows[i][0].ToString(),
+                                Name = dt.Rows[i][1].ToString(),
+                                WorkingHours = horas
+                            });
+                            
+                        }
+                    }
+
+                    for (int i = 3; i < dt.Columns.Count; i++)
+                    {
+                        if (dt.Rows[1][i].ToString() != "")
+                        {
+                            numberOfDays.Add(dt.Rows[1][i].ToString());
+                        }
+                        if (dt.Rows[2][i].ToString() != "")
+                        {
+                            Days.Add(dt.Rows[2][i].ToString());
+                        }
+                    }
+
                 }
                 else
                 {
@@ -61,6 +89,55 @@ namespace Transformación_de_Datos_de_Fichada
                 MessageBox.Show("Por favor seleccione un archivo con formato .xls");
             }
 
+        }
+
+        public DataSet GenerarDataSet(string filePath)
+        {
+            OleDbConnection oledbConn = new OleDbConnection();
+            try
+            {
+                if (Path.GetExtension(filePath) == ".xls" || Path.GetExtension(filePath) == ".XLS")
+                {
+                    oledbConn = new OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + filePath + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1\"");
+                }
+                else if (Path.GetExtension(filePath) == ".xlsx")
+                {
+                    oledbConn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties='Excel 12.0;HDR=YES;IMEX=1;';");
+                }
+
+                oledbConn.Open();
+
+                OleDbCommand cmd = new OleDbCommand(); ;
+                OleDbDataAdapter oleda = new OleDbDataAdapter();
+                DataSet ds = new DataSet();
+
+                DataTable dbSchema = oledbConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                if (dbSchema == null || dbSchema.Rows.Count < 1)
+                {
+                    throw new Exception("Error: No se puede determinar la primera hoja del excel.");
+                }
+
+                string firstSheetName = "Registros$";
+
+                cmd.Connection = oledbConn;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM [" + firstSheetName + "]";
+                oleda = new OleDbDataAdapter(cmd);
+                oleda.Fill(ds);
+
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw ex;
+            }
+            finally
+            {
+                oledbConn.Close();
+            }
         }
     }
 }

@@ -9,3 +9,11 @@ C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformació
 C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.CoreCompileInputs.cache
 C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.exe
 C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.pdb
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\DocumentFormat.OpenXml.dll
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\System.Drawing.Common.dll
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\System.IO.Packaging.dll
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\DocumentFormat.OpenXml.xml
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\System.IO.Packaging.xml
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.CopyComplete
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\SpreadsheetLight.dll
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\SpreadsheetLight.xml
