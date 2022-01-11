@@ -1,0 +1,11 @@
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\Transformación de Datos de Fichada.exe.config
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\Transformación de Datos de Fichada.exe
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\bin\Debug\Transformación de Datos de Fichada.pdb
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.AssemblyReference.cache
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.SuggestedBindingRedirects.cache
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación_de_Datos_de_Fichada.Form1.resources
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación_de_Datos_de_Fichada.Properties.Resources.resources
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.GenerateResource.cache
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.csproj.CoreCompileInputs.cache
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.exe
+C:\Users\ccoronel\source\repos\Transformacion_de_Datos_de_Fichada\Transformación de Datos de Fichada\obj\Debug\Transformación de Datos de Fichada.pdb

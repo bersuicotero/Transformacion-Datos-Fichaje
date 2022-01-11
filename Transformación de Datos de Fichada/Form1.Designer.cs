@@ -28,66 +28,79 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.txtFile = new System.Windows.Forms.TextBox();
+            this.btnChooseFile = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.btnChooseDirOutput = new System.Windows.Forms.Button();
+            this.btnProcessFile = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtFile
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 46);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(480, 20);
-            this.textBox1.TabIndex = 0;
+            this.txtFile.Location = new System.Drawing.Point(38, 49);
+            this.txtFile.Name = "txtFile";
+            this.txtFile.Size = new System.Drawing.Size(455, 20);
+            this.txtFile.TabIndex = 0;
             // 
-            // button1
+            // btnChooseFile
             // 
-            this.button1.Location = new System.Drawing.Point(499, 46);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnChooseFile.Location = new System.Drawing.Point(499, 46);
+            this.btnChooseFile.Name = "btnChooseFile";
+            this.btnChooseFile.Size = new System.Drawing.Size(180, 23);
+            this.btnChooseFile.TabIndex = 1;
+            this.btnChooseFile.Text = "Seleccionar Excel de sumario";
+            this.btnChooseFile.UseVisualStyleBackColor = true;
+            this.btnChooseFile.Click += new System.EventHandler(this.btnChooseFile_Click);
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(13, 102);
+            this.textBox2.Location = new System.Drawing.Point(38, 105);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(480, 20);
+            this.textBox2.Size = new System.Drawing.Size(455, 20);
             this.textBox2.TabIndex = 2;
             // 
-            // button2
+            // btnChooseDirOutput
             // 
-            this.button2.Location = new System.Drawing.Point(499, 102);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnChooseDirOutput.Location = new System.Drawing.Point(499, 102);
+            this.btnChooseDirOutput.Name = "btnChooseDirOutput";
+            this.btnChooseDirOutput.Size = new System.Drawing.Size(180, 23);
+            this.btnChooseDirOutput.TabIndex = 3;
+            this.btnChooseDirOutput.Text = "Elegir carpeta de salida";
+            this.btnChooseDirOutput.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // btnProcessFile
             // 
-            this.button3.Location = new System.Drawing.Point(213, 170);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(223, 29);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnProcessFile.Location = new System.Drawing.Point(173, 145);
+            this.btnProcessFile.Name = "btnProcessFile";
+            this.btnProcessFile.Size = new System.Drawing.Size(320, 44);
+            this.btnProcessFile.TabIndex = 4;
+            this.btnProcessFile.Text = "Procesar";
+            this.btnProcessFile.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(38, 195);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(641, 159);
+            this.dataGridView1.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(639, 224);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(698, 395);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.btnProcessFile);
+            this.Controls.Add(this.btnChooseDirOutput);
             this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnChooseFile);
+            this.Controls.Add(this.txtFile);
             this.Name = "Form1";
             this.Text = "Procesar Fichadas";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -95,11 +108,12 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtFile;
+        private System.Windows.Forms.Button btnChooseFile;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnChooseDirOutput;
+        private System.Windows.Forms.Button btnProcessFile;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
 
