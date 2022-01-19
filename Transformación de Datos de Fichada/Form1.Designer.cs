@@ -43,6 +43,7 @@
             this.txtFile.Name = "txtFile";
             this.txtFile.Size = new System.Drawing.Size(455, 20);
             this.txtFile.TabIndex = 0;
+            this.txtFile.ReadOnlyChanged += new System.EventHandler(this.ReadOnlyChanged);
             // 
             // btnChooseFile
             // 
@@ -60,6 +61,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(455, 20);
             this.textBox2.TabIndex = 2;
+            this.textBox2.ReadOnlyChanged += new System.EventHandler(this.ReadOnlyChanged);
             // 
             // btnChooseDirOutput
             // 
@@ -102,6 +104,7 @@
             this.Controls.Add(this.txtFile);
             this.Name = "Form1";
             this.Text = "Procesar Fichadas";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

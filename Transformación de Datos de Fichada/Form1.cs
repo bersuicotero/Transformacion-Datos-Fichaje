@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using Ookii.Dialogs.WinForms;
 using SpreadsheetLight;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Transformación_de_Datos_de_Fichada
 {
@@ -16,6 +17,7 @@ namespace Transformación_de_Datos_de_Fichada
         List<String> numberOfDays = new List<String>();
         List<userData> users = new List<userData>();
         List<userPresenteeism> presenteeisms = new List<userPresenteeism>();
+        string perExcel = string.Empty;
 
 
         public Form1()
@@ -33,12 +35,17 @@ namespace Transformación_de_Datos_de_Fichada
                 filePath = file.FileName;
                 txtFile.Text = filePath;
                 fileExt = Path.GetExtension(filePath);
+
+                txtFile.ReadOnly = true;
+                btnChooseFile.Enabled = false;
                 if (fileExt.CompareTo(".xls") == 0)
                 {
                     DataSet dataExcel = GenerarDataSet(filePath);
                     DataTable dt = dataExcel.Tables[0];
 
-
+                    string periodo = dt.Rows[0][2].ToString();
+                    string[] periodoParsed = periodo.Split('/');
+                    perExcel = periodoParsed[1];
                     for (int i = 3; i < dt.Columns.Count; i++)
                     {
                         if (dt.Rows[1][i].ToString() != "")
@@ -60,11 +67,18 @@ namespace Transformación_de_Datos_de_Fichada
                 else
                 {
                     MessageBox.Show("Solo puede ingresar archivos excel con formato .xls");
+                    btnChooseFile.Enabled = true;
+                    txtFile.ReadOnly = false;
+                    txtFile.Text = null;
+
                 }
             }
             else
             {
                 MessageBox.Show("Por favor seleccione un archivo con formato .xls");
+                btnChooseFile.Enabled = true;
+                txtFile.ReadOnly = false;
+                txtFile.Text = null;
             }
 
         }
@@ -178,6 +192,7 @@ namespace Transformación_de_Datos_de_Fichada
         {
             //Acá es donde arma toda la logica de que valores debe dibujar en el excel de salida
             //Dependiendo de el horario de la fichada y si existe o no alguna fichada
+
             foreach (var user in users)
             {
                 //Declaracion de variables
@@ -186,6 +201,7 @@ namespace Transformación_de_Datos_de_Fichada
                 userpresnew.Id = user.Id;
                 userpresnew.Name = user.Name;
 
+                int i = 1;
                 foreach (string whour in user.WorkingHours)
                 {
 
@@ -214,7 +230,7 @@ namespace Transformación_de_Datos_de_Fichada
                     }
                     else
                     {
-                        if (numberOfDays.Count >= dt.Columns.Count)
+                        if (numberOfDays.Count >= i && splitedValue[0] == "")
                         {
 
                             valuetodraw = "I";
@@ -224,64 +240,173 @@ namespace Transformación_de_Datos_de_Fichada
 
                             valuetodraw = "";
                         }
+
                     }
+                    i++;
                     userpresnew.presenteeism.Add(valuetodraw);
                 }
+
                 presenteeisms.Add(userpresnew);
 
                 #endregion
             }
         }
 
+        private SLThemeSettings BuildTheme()
+        {
+            SLThemeSettings theme = new SLThemeSettings();
+            theme.ThemeName = "RDSColourTheme";
+            theme.Light1Color = System.Drawing.Color.White;
+            theme.Dark1Color = System.Drawing.Color.Black;
+            theme.Light2Color = System.Drawing.Color.Gray;
+            theme.Dark2Color = System.Drawing.Color.IndianRed;
+            theme.Accent1Color = System.Drawing.Color.Red;
+            theme.Accent2Color = System.Drawing.Color.Tomato;
+            theme.Accent3Color = System.Drawing.Color.Yellow;
+            theme.Accent4Color = System.Drawing.Color.LawnGreen;
+            theme.Accent5Color = System.Drawing.Color.DeepSkyBlue;
+            theme.Accent6Color = System.Drawing.Color.DarkViolet;
+            theme.Hyperlink = System.Drawing.Color.Blue;
+            theme.FollowedHyperlinkColor = System.Drawing.Color.Purple;
+            return theme;
+        }
+
+        public bool exportToExcel(string path)
+        {
+            try
+            {
+                SLThemeSettings settings = BuildTheme();
+                SLDocument doc = new SLDocument(settings);
+
+                //Se definen los estilos para los headers
+                SLStyle headerStyle = doc.CreateStyle();
+                headerStyle.Font.FontColor = System.Drawing.Color.White;
+                headerStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Light2Color, SLThemeColorIndexValues.Light2Color);
+
+                //Se definen los estilos para los capos de presentismo
+                SLStyle errorStyle = doc.CreateStyle();
+                SLStyle absenceStyle = doc.CreateStyle();
+
+                absenceStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent2Color, SLThemeColorIndexValues.Accent2Color);
+                errorStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent1Color, SLThemeColorIndexValues.Accent1Color);
+
+                //Se setean los headers de las 2 primeras columnas
+                doc.SetCellValue(2, 1, "ID");
+                doc.SetCellStyle(2, 1, headerStyle);
+                doc.SetCellValue(2, 2, "Empleado");
+                doc.SetColumnWidth(2, 2, 20);
+                doc.SetCellStyle(2, 2, headerStyle);
+
+                int iNDays = 3;
+                foreach (string nd in numberOfDays)
+                {
+                    doc.SetCellValue(1, iNDays, nd);
+                    iNDays++;
+                }
+                int iDays = 3;
+                foreach (string d in Days)
+                {
+                    doc.SetCellValue(2, iDays, d);
+                    doc.SetCellStyle(2, iDays, headerStyle);
+                    iDays++;
+                }
+
+                int iRow = 3;
+                foreach (userPresenteeism s in presenteeisms)
+                {
+                    doc.SetCellValue(iRow, 1, s.Id);
+                    doc.SetCellValue(iRow, 2, s.Name);
+
+                    int iCol = 3;
+                    foreach (string p in s.presenteeism)
+                    {
+                        doc.SetCellValue(iRow, iCol, p);
+                        if (p == "E")
+                        {
+                            doc.SetCellStyle(iRow, iCol, errorStyle);
+                        }
+                        if (p == "I")
+                        {
+                            doc.SetCellStyle(iRow, iCol, absenceStyle);
+                        }
+
+                        iCol++;
+                    }
+                    iRow++;
+                }
+
+                doc.SaveAs(path);
+                MessageBox.Show("Se exportó correctamente el archivo" + " " + perExcel + "Resultado.xlsx  en la ruta: " + textBox2.Text);
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+        }
 
         #endregion
 
         private void btnProcessFile_Click(object sender, EventArgs e)
         {
-
-            string path = textBox2.Text + "\\" +"tabla.xlsx";
-
-            SLDocument doc = new SLDocument();
-            int iNDays = 3;
-            foreach (string nd in numberOfDays)
+            try
             {
-                doc.SetCellValue(1, iNDays, nd);
-                iNDays++;
-            }
-            int iDays = 3;
-            foreach (string d in Days)
-            {
-                doc.SetCellValue(2, iDays, d);
-                iDays++;
-            }
+                string path = textBox2.Text + "\\" + perExcel + "Resultado.xlsx";
+                var result = exportToExcel(path);
 
-            int iRow = 3;
-            foreach (userPresenteeism s in presenteeisms)
-            {
-                doc.SetCellValue(iRow,1,s.Id);
-                doc.SetCellValue(iRow,2,s.Name);
-
-                int iCol = 3;
-                foreach(string p in s.presenteeism)
+                if (result == true)
                 {
-                    doc.SetCellValue(iRow, iCol, p);
-
-                    iCol++;
+                    dataGridView1.DataSource = null;
+                    numberOfDays.Clear();
+                    Days.Clear();
+                    users.Clear();
+                    presenteeisms.Clear();
+                    btnChooseFile.Enabled = true;
+                    txtFile.ReadOnly = false;
+                    txtFile.Text = null;
+                    btnChooseDirOutput.Enabled = true;
+                    textBox2.ReadOnly = false;
+                    textBox2.Text = null;
                 }
-                iRow++;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
-            doc.SaveAs(path);
         }
 
         private void btnChooseDirOutput_Click(object sender, EventArgs e)
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
-            if(dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 textBox2.Text = dialog.SelectedPath;
+                textBox2.ReadOnly = true;
+                btnChooseDirOutput.Enabled = false;
             }
 
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            btnProcessFile.Enabled = false;
+        }
+
+
+        private void ReadOnlyChanged(object sender, EventArgs e)
+        {
+            if (txtFile.ReadOnly == true && textBox2.ReadOnly == true)
+            {
+                btnProcessFile.Enabled = true;
+            }
+            else
+            {
+                btnProcessFile.Enabled = false;
+            }
         }
     }
 }
