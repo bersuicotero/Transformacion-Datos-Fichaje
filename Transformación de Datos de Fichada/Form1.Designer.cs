@@ -69,6 +69,7 @@
             this.btnChooseDirOutput.TabIndex = 3;
             this.btnChooseDirOutput.Text = "Elegir carpeta de salida";
             this.btnChooseDirOutput.UseVisualStyleBackColor = true;
+            this.btnChooseDirOutput.Click += new System.EventHandler(this.btnChooseDirOutput_Click);
             // 
             // btnProcessFile
             // 
@@ -78,6 +79,7 @@
             this.btnProcessFile.TabIndex = 4;
             this.btnProcessFile.Text = "Procesar";
             this.btnProcessFile.UseVisualStyleBackColor = true;
+            this.btnProcessFile.Click += new System.EventHandler(this.btnProcessFile_Click);
             // 
             // dataGridView1
             // 
