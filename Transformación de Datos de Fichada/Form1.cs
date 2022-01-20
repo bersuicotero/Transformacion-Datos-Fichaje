@@ -42,7 +42,6 @@ namespace Transformación_de_Datos_de_Fichada
 
                 if (fileExt.CompareTo(".xls") == 0)
                 {
-                    //GetDataWithSpreadSheet(filePath);
                     DataSet dataExcel = GenerarDataSet(filePath);
                     DataTable dt = dataExcel.Tables[0];
 
@@ -88,14 +87,6 @@ namespace Transformación_de_Datos_de_Fichada
 
         }
 
-        public void GetDataWithSpreadSheet(string path)
-        {
-            SLDocument doc = new SLDocument(path);
-
-
-
-
-        }
 
         public DataSet GetDataTable(List<userPresenteeism> users)
         {
