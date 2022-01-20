@@ -32,20 +32,25 @@ namespace Transformación_de_Datos_de_Fichada
             OpenFileDialog file = new OpenFileDialog();
             if (file.ShowDialog() == DialogResult.OK)
             {
+
                 filePath = file.FileName;
                 txtFile.Text = filePath;
                 fileExt = Path.GetExtension(filePath);
 
                 txtFile.ReadOnly = true;
                 btnChooseFile.Enabled = false;
+
                 if (fileExt.CompareTo(".xls") == 0)
                 {
+                    //GetDataWithSpreadSheet(filePath);
                     DataSet dataExcel = GenerarDataSet(filePath);
                     DataTable dt = dataExcel.Tables[0];
 
                     string periodo = dt.Rows[0][2].ToString();
                     string[] periodoParsed = periodo.Split('/');
                     perExcel = periodoParsed[1];
+
+
                     for (int i = 3; i < dt.Columns.Count; i++)
                     {
                         if (dt.Rows[1][i].ToString() != "")
@@ -80,6 +85,15 @@ namespace Transformación_de_Datos_de_Fichada
                 txtFile.ReadOnly = false;
                 txtFile.Text = null;
             }
+
+        }
+
+        public void GetDataWithSpreadSheet(string path)
+        {
+            SLDocument doc = new SLDocument(path);
+
+
+
 
         }
 
@@ -146,8 +160,10 @@ namespace Transformación_de_Datos_de_Fichada
                 cmd.Connection = oledbConn;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = "SELECT * FROM [" + firstSheetName + "]";
-                oleda = new OleDbDataAdapter(cmd);
+                oleda.SelectCommand = cmd;
                 oleda.Fill(ds);
+
+                oledbConn.Close();
 
                 return ds;
 
@@ -202,6 +218,7 @@ namespace Transformación_de_Datos_de_Fichada
                 userpresnew.Name = user.Name;
 
                 int i = 1;
+                int daysCol = 0;
                 foreach (string whour in user.WorkingHours)
                 {
 
@@ -230,7 +247,7 @@ namespace Transformación_de_Datos_de_Fichada
                     }
                     else
                     {
-                        if (numberOfDays.Count >= i && splitedValue[0] == "")
+                        if (numberOfDays.Count >= i && splitedValue[0] == "" && Days[daysCol].ToString() != "Do")
                         {
 
                             valuetodraw = "I";
@@ -243,6 +260,7 @@ namespace Transformación_de_Datos_de_Fichada
 
                     }
                     i++;
+                    daysCol++;
                     userpresnew.presenteeism.Add(valuetodraw);
                 }
 
@@ -286,9 +304,11 @@ namespace Transformación_de_Datos_de_Fichada
                 //Se definen los estilos para los capos de presentismo
                 SLStyle errorStyle = doc.CreateStyle();
                 SLStyle absenceStyle = doc.CreateStyle();
+                SLStyle SunDayStyle = doc.CreateStyle();
 
                 absenceStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent2Color, SLThemeColorIndexValues.Accent2Color);
                 errorStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent1Color, SLThemeColorIndexValues.Accent1Color);
+                SunDayStyle.Fill.SetPattern(PatternValues.Solid, SLThemeColorIndexValues.Accent5Color, SLThemeColorIndexValues.Accent5Color);
 
                 //Se setean los headers de las 2 primeras columnas
                 doc.SetCellValue(2, 1, "ID");
@@ -318,6 +338,7 @@ namespace Transformación_de_Datos_de_Fichada
                     doc.SetCellValue(iRow, 2, s.Name);
 
                     int iCol = 3;
+                    int daysCol = 0;
                     foreach (string p in s.presenteeism)
                     {
                         doc.SetCellValue(iRow, iCol, p);
@@ -329,7 +350,15 @@ namespace Transformación_de_Datos_de_Fichada
                         {
                             doc.SetCellStyle(iRow, iCol, absenceStyle);
                         }
+                        if (p == "" && daysCol < Days.Count )
+                        {
+                            if (Days[daysCol].ToString() == "Do")
+                            {
+                                doc.SetCellStyle(iRow, iCol, SunDayStyle);
 
+                            }
+                        }
+                        daysCol++;
                         iCol++;
                     }
                     iRow++;
@@ -345,7 +374,21 @@ namespace Transformación_de_Datos_de_Fichada
                 return false;
             }
         }
+        public void unlockForm()
+        {
+            dataGridView1.DataSource = null;
+            numberOfDays.Clear();
+            Days.Clear();
+            users.Clear();
+            presenteeisms.Clear();
+            btnChooseFile.Enabled = true;
+            txtFile.ReadOnly = false;
+            txtFile.Text = null;
+            btnChooseDirOutput.Enabled = true;
+            textBox2.ReadOnly = false;
+            textBox2.Text = null;
 
+        }
         #endregion
 
         private void btnProcessFile_Click(object sender, EventArgs e)
@@ -357,17 +400,12 @@ namespace Transformación_de_Datos_de_Fichada
 
                 if (result == true)
                 {
-                    dataGridView1.DataSource = null;
-                    numberOfDays.Clear();
-                    Days.Clear();
-                    users.Clear();
-                    presenteeisms.Clear();
-                    btnChooseFile.Enabled = true;
-                    txtFile.ReadOnly = false;
-                    txtFile.Text = null;
-                    btnChooseDirOutput.Enabled = true;
-                    textBox2.ReadOnly = false;
-                    textBox2.Text = null;
+                    unlockForm();
+                }
+                if (result == false)
+                {
+                    MessageBox.Show("Algo salió mal, intentelo de nuevo. Si anteriormente exportó el mismo archivo, asegurese de no tenerlo abierto");
+                    unlockForm();
                 }
 
             }
